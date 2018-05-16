@@ -1,4 +1,4 @@
-cmdlist=( "date" "ip --list" ) #"route --list" "usersession --list" "encryptkey --info" "cert --list" "chapuser --list")
+cmdlist=( "date" "ip --list" "route --list" "usersession --list" "encryptkey --info" "cert --list" "chapuser --list")
 commands="nic netconfig subnet perfpolicy useradmin userauth prottmpl array initiatorgrp software shelf pool vol disk ctrlr folder snap fc vcenter partner pe group volcoll snapcoll sshkey alarm alert auditlog"
 
 function com_gen {
