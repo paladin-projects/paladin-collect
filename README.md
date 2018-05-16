@@ -6,3 +6,7 @@ This repo contains scripts that we use to collect configuration and diagnostics 
 
 # nympho
 Nimble Storage Info Collector Script
+
+Skipped commands: ? help timezone halt reboot setup migration failover stats version vmwplugin
+
+

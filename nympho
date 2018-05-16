@@ -1,0 +1,36 @@
+cmdlist=( "date" "ip --list" ) #"route --list" "usersession --list" "encryptkey --info" "cert --list" "chapuser --list")
+commands="nic netconfig subnet perfpolicy useradmin userauth prottmpl array initiatorgrp software shelf pool vol disk ctrlr folder snap fc vcenter partner pe group volcoll snapcoll sshkey alarm alert auditlog"
+
+function com_gen {
+	local awkbeg awkpr cmd
+	cmd="$1 --list 2>/dev/null"
+	case $1 in
+		folder)
+			awkpr="split(\$1, path, \":/\"); print \"$1 --info \" path[2] \" --pool \" path[1]"
+		;;
+		fc)
+			awkpr="if (NR == 1) next; print \"$1 --info \" \$1 \" --ctrlr \" \$2"
+		;;
+		perfpolicy)
+			awkbeg='BEGIN { FIELDWIDTHS="42" }'
+			awkpr="gsub(/ *$/, \"\", \$1); print \"$1 --info \\\"\" \$1 \"\\\"\""
+		;;
+		snap)
+			cmd="$1 --list --all"
+			awkpr="print \"$1 --info \" \$2 \" --vol \" \$1"
+		;;
+		vm)
+			return # Cannot test currently. `vm --list` returns a message into stdout when there is no VMs
+		;;
+		*)
+			awkpr="print \"$1 --info \" \$1"
+			;;
+	esac
+	IFS=$'\n' cmdlist+=(`eval $cmd | awk "$awkbeg /^---.*$/ {skip = ! skip; next} skip == 1 {next} { $awkpr }"`)
+}
+
+for i in $commands; do
+	com_gen $i
+done
+
+printf '%s\n' "${cmdlist[@]}"
