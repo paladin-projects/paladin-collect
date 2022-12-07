@@ -17,3 +17,6 @@ Skipped commands: ? help timezone halt reboot setup migration failover stats ver
 `ssh admin@<nimble> < nympho > nympho.out`
 
 1. In PuTTY open the connection, start loggin, copy-paste script body with right-click. (Session may hang at the end, but it is ok)
+
+1. With full PuTTY distributive installed, or with Plink installed:
+`plink.exe -ssh admin@<nimble> < nympho > nympho.out`
