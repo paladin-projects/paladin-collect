@@ -1,0 +1,25 @@
+export SVTCLI_OUT=xml
+svt-backup-show
+svt-datastore-show
+svt-external-store-show
+svt-federation-show
+svt-fixpack-verify
+svt-hardware-show --details
+svt-ilo-credential-show
+svt-iwo-show
+svt-network-test --ip-test --mtu-test --port-test
+svt-node-compliance
+svt-policy-report-show
+svt-policy-show
+svt-pv-show
+svt-session-diagnostics
+svt-session-verify
+svt-software-status-show
+svt-support-show
+svt-task-show
+svt-timezone-show
+svt-version-show --all
+svt-vm-backup-params-show
+svt-vm-show
+svt-watchdog-show
+svt-zone-show
