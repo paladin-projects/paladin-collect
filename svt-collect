@@ -1,4 +1,84 @@
 export SVTCLI_OUT=xml
+dsv-backupscheduler-show
+dsv-backup-util --operation state-info
+dsv-balance-show --status
+dsv-balance-show --leader
+dsv-balance-show --shownodeip
+dsv-balance-show --consumption
+dsv-boot-admin --list
+dsv-broadcasttreeprovider-counters-show
+dsv-broadcasttreeprovider-tree-show
+dsv-cfgdb-get-sync-status
+dsv-connectivity-check
+dsv-counter-show
+dsv-devices-show
+dsv-electionservice-counters-show
+dsv-event-mgr status
+dsv-failuredomain-show
+dsv-filerestore-get-activemounts
+dsv-filerestore-get-vmdkfilelist
+dsv-hal-show
+dsv-hal-pui-show
+dsv-hive-job-limits-show
+dsv-hive-job-show
+dsv-hive-show
+dsv-hive-view-show
+dsv-hyperproxy --status
+dsv-hyperproxy --heartbeatinfo
+dsv-iwo-hostgroup-show
+dsv-iwo-rule-show
+dsv-iwo-sync-show
+dsv-iwo-vmgroup-show
+dsv-loglevel-show
+dsv-managed-service-show
+dsv-mem-show
+dsv-mva-show
+dsv-nfsd-connection-show
+dsv-nfsd-export-show
+dsv-nfsd-mount-show
+dsv-nfsd-thread-info-show
+dsv-nvram-control --dump_labels
+dsv-objectstore-gc-show
+dsv-obt-alloc-stats-show
+dsv-obtc-requestcounters-show
+dsv-obtc-requests-show
+dsv-obt-inject-error-show
+dsv-obt-inputqueue
+dsv-obt-perfcounters-show
+dsv-obt-threadcounters-show
+dsv-omnicube-getstatus
+dsv-patch-admin --verify
+dsv-protocol-counters-show
+dsv-rate-adjuster-show
+dsv-rate-adjuster-show --detail
+dsv-routing-control modules
+dsv-routing-control routes
+dsv-routing-control dv neighbors
+dsv-routing-control dv topo
+dsv-shortcircuit-control --list
+dsv-stats-show --resolution day --range 14 --all
+dsv-stats-show --resolution hour --range 144 --all
+dsv-storage-defrag-show --detail --config --stripes
+dsv-storage-allocation-show --summary --detail --counters
+dsv-storage-profile --bufferpools
+dsv-storage-readcache-show
+dsv-storage-readcache-show --detail --config
+dsv-tasks-get-active --scope 3
+dsv-tasks-get-failed --scope 2
+dsv-topology-service-show --all
+dsv-topology-service-show --topology
+dsv-topology-service-show --connectivity
+dsv-tree-enumerate
+dsv-tree-find-orphaned
+dsv-txn-archive --display
+dsv-txn-archive --verify
+dsv-vaai-session-list
+dsv-vasaprovider-list
+dsv-vault-conversion-show
+dsv-vault-show --all
+dsv-vcenter-server-show
+dsv-vm-query --show-invisible-vms --max-results 25000
+dsv-vm-query --max-results 25000
 svt-backup-show
 svt-datastore-show
 svt-external-store-show
@@ -16,7 +96,6 @@ svt-session-diagnostics
 svt-session-verify
 svt-software-status-show
 svt-support-show
-svt-task-show
 svt-timezone-show
 svt-version-show --all
 svt-vm-backup-params-show
