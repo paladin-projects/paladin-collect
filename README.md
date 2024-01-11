@@ -32,6 +32,6 @@ Scanserv\* scripts depend on jq utility. Get it from <https://jqlang.github.io/j
 1. Run script by typing its name. The script will ask you to enter iLO IP address, login, password. Results are saved to `collected*` file.
 
 # svt-collect
-`svt-collect` is a script to collect most of \*-show commands from SimpliVity node. Copy it to OmniStack Virtual Controller (SimpliVity Virtual Appliance) via SCP/SFTP (for example with WinSCP) and run as
+`svt-collect` is a script to collect most of \*-show commands from SimpliVity node. Copy it to OmniStack Virtual Controller (SimpliVity Virtual Appliance) via SCP/SFTP (for example with WinSCP), login as `svtcli` user and run as
 
 `bash svt-collect > svt-collect.out`
