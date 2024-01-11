@@ -22,7 +22,7 @@ Skipped commands: ? help timezone halt reboot setup migration failover stats ver
 Collect information from iLO via iLO RESTful interface (Redfish)
 
 ## Dependecies
-Scanserv* scripts depend on jq utility. Get it from <https://jqlang.github.io/jq/>.
+Scanserv\* scripts depend on jq utility. Get it from <https://jqlang.github.io/jq/>.
 
 ## Usage
 1. In Windows press Win+R.
@@ -30,3 +30,8 @@ Scanserv* scripts depend on jq utility. Get it from <https://jqlang.github.io/jq
 1. Change directory to where you downloaded scripts.
 1. Make sure jq-win64.exe is in the same folder.
 1. Run script by typing its name. The script will ask you to enter iLO IP address, login, password. Results are saved to `collected*` file.
+
+# svt-collect
+`svt-collect` is a script to collect most of \*-show commands from SimpliVity node. Copy it to OmniStack Virtual Controller (SimpliVity Virtual Appliance) via SCP/SFTP (for example with WinSCP) and run as
+
+`bash svt-collect > svt-collect.out`
