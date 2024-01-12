@@ -22,8 +22,9 @@ set /p address="Введите IP-адрес ILO сервера:"
 set /p user="Введите логин пользователя ILO:"
 set /p pass="Введите пароль пользователя ILO:"
 set fname=collectedStatus
-curl -D result.txt -o result.json -u %user%:%pass% -k -X GET https://%address%/rest/v1/Chassis/1 -H "Content-Type: application/json"
-findstr "200" "result.txt" 2>nul >nul && (
+curl -u %user%:%pass% -k -X GET https://%address%/rest/v1/Chassis/1 -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r "." | FIND /I "SerialNumber" >nul
+if !ERRORLEVEL!==0 (goto start) else (goto TP)
+:start
 echo &echo.&echo.>> %~dp0\%fname%.txt
 echo --- Server -%address%----- >> %~dp0\%fname%.txt
 echo &echo.&echo.>> %~dp0\%fname%.txt
@@ -53,7 +54,7 @@ curl -u %user%:%pass% -k -X GET https://%address%/rest/v1/Systems/1/SmartStorage
 echo &echo.&echo.>> %~dp0\%fname%.txt
 echo --- Battery/Capacitor --------- >> %~dp0\%fname%.txt
 echo &echo.&echo.>> %~dp0\%fname%.txt
-curl -u %user%:%pass% -k -X GET https://%address%/rest/v1/Systems/1 -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r ".Oem.Hp.Battery[]|.ProductName, .Model, .SerialNumber, .Spare" >> %~dp0\%fname%.txt
+curl -u %user%:%pass% -k -X GET https://%address%/rest/v1/Systems/1 -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r ".Oem.Hp.Battery[]|.ProductName, .Model, .SerialNumber, .Spare, .Condition" >> %~dp0\%fname%.txt
 
 echo &echo.&echo.>> %~dp0\%fname%.txt
 echo --- HDDs ---------------------- >> %~dp0\%fname%.txt
@@ -101,23 +102,25 @@ echo &echo.&echo.>> %~dp0\%fname%.txt
 curl -u %user%:%pass% -k -X GET https://%address%/rest/v1/Chassis/1/Thermal -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r ".Fans[]|.FanName, .Status[]" >> %~dp0\%fname%.txt
 
 echo &echo.&echo.>> %~dp0\%fname%.txt
-echo --- FirmwareInventory --------------- >> %~dp0\%fname%.txt
+echo --- Firmware Inventory --------------- >> %~dp0\%fname%.txt
 echo &echo.&echo.>> %~dp0\%fname%.txt
 curl -u %user%:%pass% -k -X GET https://%address%/rest/v1/Systems/1/FirmwareInventory -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r ".Current[]|.[].[]" >> %~dp0\%fname%.txt
 
 echo &echo.&echo.>> %~dp0\%fname%.txt
 echo --- IML log --------------- >> %~dp0\%fname%.txt
 echo &echo.&echo.>> %~dp0\%fname%.txt
-curl -u %user%:%pass% -k -X GET https://%address%/rest/v1/Systems/1/LogServices/IML/Entries -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r ".links.Member[].href[6:]" > %~dp0\Entries.txt
-for /f "usebackq tokens=*" %%e in ("%~dp0\Entries.txt") do (
+curl -u %user%:%pass% -k -X GET https://%address%/rest/v1/Systems/1/LogServices/IML/Entries -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r ".Total" > %~dp0\count.tmp
+for /f "usebackq tokens=*" %%o in ("%~dp0\count.tmp") do (
+set /a count1=%%~o
+set /a count2=%%~o-30
+del %~dp0\count.tmp
+)
+for /L %%y in (%count1%,-1,%count2%) do (
 echo &echo.&echo.>> %~dp0\%fname%.txt
-curl -u %user%:%pass% -k -X GET https://%address%/rest/%%e -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r ".|.RecordId, .Created, .Message, .Severity" >> %~dp0\%fname%.txt
+curl -u %user%:%pass% -k -X GET https://%address%/rest/v1/Systems/1/LogServices/IML/Entries/%%y -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r ".|.Id, .RecordId, .Created, .Message, .Severity" >> %fname%.txt
 echo &echo.&echo.>> %~dp0\%fname%.txt
 )
-del %~dp0\Entries.txt
-) || goto TP
-del %~dp0\result.txt
-del %~dp0\result.json
+
 pause
 exit
 
@@ -159,7 +162,9 @@ echo --- RAM ----------------------- >> %~dp0\%fname%.txt
 echo &echo.&echo.>> %~dp0\%fname%.txt
 curl -u %user%:%pass% -k -X GET https://%%~k/rest/v1/Systems/1/Memory -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r .links.Member[].href[6:] >> %~dp0\memory.txt
 for /f "usebackq tokens=*" %%a in ("%~dp0\memory.txt") do (
+echo &echo.&echo.>> %~dp0\%fname%.txt
 curl -u %user%:%pass% -k -X GET https://%%~k/rest/%%~a -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r ".|.Name, .PartNumber, .SizeMB, .MaximumFrequencyMHz, .DIMMTechnology, .DIMMType?, .DIMMStatus" >> %~dp0\%fname%.txt
+echo &echo.&echo.>> %~dp0\%fname%.txt
 )
 del %~dp0\memory.txt
 
@@ -171,7 +176,7 @@ curl -u %user%:%pass% -k -X GET https://%%~k/rest/v1/Systems/1/SmartStorage/Arra
 echo &echo.&echo.>> %~dp0\%fname%.txt
 echo --- Battery/Capacitor --------- >> %~dp0\%fname%.txt
 echo &echo.&echo.>> %~dp0\%fname%.txt
-curl -u %user%:%pass% -k -X GET https://%%~k/rest/v1/Systems/1 -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r ".Oem.Hp.Battery[]|.ProductName, .Model, .SerialNumber, .Spare" >> %~dp0\%fname%.txt
+curl -u %user%:%pass% -k -X GET https://%%~k/rest/v1/Systems/1 -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r ".Oem.Hp.Battery[]|.ProductName, .Model, .SerialNumber, .Spare, .Condition" >> %~dp0\%fname%.txt
 
 echo &echo.&echo.>> %~dp0\%fname%.txt
 echo --- HDDs ---------------------- >> %~dp0\%fname%.txt
@@ -180,7 +185,9 @@ curl -u %user%:%pass% -k -X GET https://%%~k/rest/v1/Systems/1/SmartStorage/Arra
 for /f "usebackq tokens=*" %%h in ("%~dp0\ArraysCtr.txt") do (
 curl -u %user%:%pass% -k -X GET https://%%~k/rest/%%~h/DiskDrives -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r .links.Member[].href[6:] >> %~dp0\disks.txt 
 for /f "usebackq tokens=*" %%d in ("%~dp0\disks.txt") do (
+echo &echo.&echo.>> %~dp0\%fname%.txt
 curl -u %user%:%pass% -k -X GET https://%%~k/rest/%%~d -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r ".|.CapacityGB?, .Model?, .InterfaceType?, .SerialNumber?, .Status[]" >> %~dp0\%fname%.txt
+echo &echo.&echo.>> %~dp0\%fname%.txt
 )
 )
 del %~dp0\disks.txt
@@ -191,12 +198,14 @@ echo --- NICs ---------------------- >> %~dp0\%fname%.txt
 echo &echo.&echo.>> %~dp0\%fname%.txt
 curl -u %user%:%pass% -k -X GET https://%%~k/rest/v1/Systems/1/NetworkAdapters -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r .links.Member[].href[6:] >> %~dp0\ethadp.txt
 for /f "usebackq tokens=*" %%e in ("%~dp0\ethadp.txt") do (
+echo &echo.&echo.>> %~dp0\%fname%.txt
 curl -u %user%:%pass% -k -X GET https://%%~k/rest/%%~e -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r ".|.Name?, .PartNumber?, .SerialNumber?" >> %~dp0\%fname%.txt
+echo &echo.&echo.>> %~dp0\%fname%.txt
 )
 del %~dp0\ethadp.txt
 
 echo &echo.&echo.>> %~dp0\%fname%.txt
-echo &echo.&echo.--- PowerSupplies ------------- >> %~dp0\%fname%.txt
+echo &echo.&echo.--- Power Supplies ------------- >> %~dp0\%fname%.txt
 echo &echo.&echo.>> %~dp0\%fname%.txt
 curl -u %user%:%pass% -k -X GET https://%%~k/rest/v1/Chassis/1/Power -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r ".PowerSupplies[]|.SerialNumber, .SparePartNumber, .PowerCapacityWatts, .Model" >> %~dp0\%fname%.txt
 
@@ -205,7 +214,9 @@ echo --- PCI Devices --------------- >> %~dp0\%fname%.txt
 echo &echo.&echo.>> %~dp0\%fname%.txt
 curl -u %user%:%pass% -k -X GET https://%%~k/rest/v1/Systems/1/PCIDevices -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r .links.Member[].href[6:] >> %~dp0\pcidev.txt 
 for /f "usebackq tokens=*" %%t in ("%~dp0\pcidev.txt") do (
+echo &echo.&echo.>> %~dp0\%fname%.txt
 curl -u %user%:%pass% -k -X GET https://%%~k/rest/%%~t -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r ".|.Name?" >> %~dp0\%fname%.txt
+echo &echo.&echo.>> %~dp0\%fname%.txt
 )
 del %~dp0\pcidev.txt
 ) || goto TP
