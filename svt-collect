@@ -1,4 +1,6 @@
 export SVTCLI_OUT=xml
+source /var/tmp/build/bin/svt_functions
+source /var/tmp/build/bin/appsetup
 dsv-backupscheduler-show
 dsv-backup-util --operation state-info
 dsv-balance-show --status
