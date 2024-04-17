@@ -1,6 +1,6 @@
 exec 2>/dev/null
-cmdlist=( "date" "ip --list" "route --list" "usersession --list" "encryptkey --info" "cert --list" "chapuser --list" "group --list" "group --info")
-commands="nic netconfig subnet perfpolicy useradmin userauth prottmpl array initiatorgrp software shelf pool vol disk ctrlr folder snap fc vcenter partner pe volcoll snapcoll sshkey alarm alert auditlog"
+cmdlist=( "date" "group --info" "array --list" "ctrlr --info A" "ctrlr --info B" "ip --list" "route --list" "usersession --list" "cert --list" "chapuser --list" "alert --list" )
+commands="array fc shelf disk useradmin userauth nic netconfig subnet perfpolicy prottmpl initiatorgrp pool vol folder snap vcenter partner pe volcoll snapcoll sshkey alarm auditlog"
 
 for i in $commands; do
 	cmd="$i --list"
@@ -11,7 +11,7 @@ for i in $commands; do
 			awkpr="split(\$1, path, \":/\"); print \"$i --info \" path[2] \" --pool \" path[1]"
 		;;
 		fc)
-			awkpr="if (NR == 1) next; print \"$i --info \" \$1 \" --ctrlr \" \$2"
+			awkpr="NR != 1 {print \"$i --info \" \$1 \" --ctrlr \" \$2}"
 		;;
 		perfpolicy)
 			awkbeg='BEGIN { FIELDWIDTHS="42" }'
@@ -29,9 +29,8 @@ for i in $commands; do
 done
 
 for i in "${cmdlist[@]}" ; do
-	cmdlist2+=("echo \\> $i; $i; echo; ")
+	eval "echo \\> $i; $i; echo; "
 done
 
-eval "${cmdlist2[@]}"
-echo "============== Nympho 0.1 ==============="
+echo "============== Nympho 0.2 ==============="
 
