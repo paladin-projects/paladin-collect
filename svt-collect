@@ -4,10 +4,9 @@ export SVTCLI_OUT=xml
 svt-session-start
 #dsv-backupscheduler-show
 #dsv-backup-util --operation state-info
-dsv-balance-show --status
-dsv-balance-show --leader
-dsv-balance-show --shownodeip
-dsv-balance-show --consumption
+dsv-balance-show --consumption --shownodeip --showhivename
+dsv-balance-show --status --shownodeip
+dsv-balance-show --leader --shownodeip
 #dsv-boot-admin --list
 dsv-broadcasttreeprovider-counters-show
 dsv-broadcasttreeprovider-tree-show
@@ -28,6 +27,8 @@ dsv-hive-show
 #dsv-hive-view-show
 dsv-hyperproxy --status
 dsv-hyperproxy --heartbeatinfo
+dsv-iomgr-show --counters
+dsv-iomgr-show --regions
 dsv-iwo-hostgroup-show
 dsv-iwo-rule-show
 dsv-iwo-sync-show
@@ -82,6 +83,7 @@ dsv-vault-conversion-show # No XML
 dsv-vcenter-server-show
 dsv-vm-query --show-invisible-vms --max-results 25000
 #dsv-vm-query --max-results 25000
+dsv-volmgr-show --detail # No XML
 svt-backup-show
 svt-datastore-show
 svt-external-store-show
