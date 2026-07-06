@@ -31,7 +31,7 @@ del %~dp0\memory.txt
 echo &echo.&echo.>> %~dp0\%fname%.txt
 echo --- RAID Controllers ---------- >> %~dp0\%fname%.txt
 echo &echo.&echo.>> %~dp0\%fname%.txt
-curl -k -X GET https://%user%:%pass%@%address%/rest/v1/Systems/1/SmartStorage/ArrayControllers/0 -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r ".|.Model?, .SerialNumber?, .InterfaceType?, .SerialNumber?" >> %~dp0\%fname%.txt
+curl -k -X GET https://%user%:%pass%@%address%/rest/v1/Systems/1/SmartStorage/ArrayControllers/0 -H "Content-Type: application/json" | %~dp0\jq-win64.exe -r ".|.Model?, .SerialNumber?, .InterfaceType?" >> %~dp0\%fname%.txt
 
 echo &echo.&echo.>> %~dp0\%fname%.txt
 echo --- Battery/Capacitor --------- >> %~dp0\%fname%.txt
