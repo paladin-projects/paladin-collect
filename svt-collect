@@ -1,7 +1,7 @@
 export SVTCLI_OUT=xml
 source /var/tmp/build/bin/svt_functions
 source /var/tmp/build/bin/appsetup
-dsv-backupscheduler-show
+#dsv-backupscheduler-show
 dsv-backup-util --operation state-info
 dsv-balance-show --status
 dsv-balance-show --leader
@@ -51,8 +51,8 @@ dsv-obt-threadcounters-show
 dsv-omnicube-getstatus
 dsv-patch-admin --verify
 dsv-protocol-counters-show
-dsv-rate-adjuster-show
-dsv-rate-adjuster-show --detail
+#dsv-rate-adjuster-show
+#dsv-rate-adjuster-show --detail
 dsv-routing-control modules
 dsv-routing-control routes
 dsv-routing-control dv neighbors
@@ -77,7 +77,7 @@ dsv-txn-archive --verify
 dsv-vaai-session-list
 dsv-vasaprovider-list
 dsv-vault-conversion-show
-dsv-vault-show --all
+#dsv-vault-show --all
 dsv-vcenter-server-show
 dsv-vm-query --show-invisible-vms --max-results 25000
 dsv-vm-query --max-results 25000
