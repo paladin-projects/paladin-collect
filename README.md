@@ -34,4 +34,6 @@ Scanserv\* scripts depend on jq utility. Get it from <https://jqlang.github.io/j
 # svt-collect
 `svt-collect` is a script to collect most of \*-show commands from SimpliVity node. Copy it to OmniStack Virtual Controller (SimpliVity Virtual Appliance) via SCP/SFTP (for example with WinSCP), login as `svtcli` user and run as
 
-`bash svt-collect > svt-collect.out`
+`sudo bash svt-collect > ``hostname``.out 2>&1`
+
+The script will ask for vCenter credentials twice (in svt-session-start and dsv-mva-show).
