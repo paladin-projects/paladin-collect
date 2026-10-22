@@ -37,3 +37,25 @@ Scanserv\* scripts depend on jq utility. Get it from <https://jqlang.github.io/j
 `sudo bash svt-collect > ``hostname``.out 2>&1`
 
 The script will ask for vCenter credentials twice (in svt-session-start and dsv-mva-show).
+
+# get-insplore.py
+Collect InSplore via Primera UI API.
+
+```shell
+get-insplore.py [-h] --host HOST [--user USER] [--out OUT] [--no-cli] [--no-node] [--no-toc] [--force] [--timeout TIMEOUT]
+                       [--verify-tls]
+
+options:
+  -h, --help         show this help message and exit
+  --host HOST
+  --user USER
+  --out OUT
+  --no-cli
+  --no-node
+  --no-toc
+  --force            collect even if a software update is in progress
+  --timeout TIMEOUT
+  --verify-tls
+```
+
+The script will connect to Primera, start InSplore collection task, wait for it to finish and dowloand collected tbz2 archive.
